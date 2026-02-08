@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duplicate Tab Closer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Duplicate Tab Closer</h1>
+    </header>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <span>Scanning tabs...</span>
+    </div>
+
+    <div id="content" class="hidden">
+      <!-- Exact Duplicates Section -->
+      <section id="exact-section" class="section">
+        <div class="section-header">
+          <h2>Exact Duplicates</h2>
+          <span id="exact-count" class="count-badge">0 tabs</span>
+        </div>
+        <div id="exact-list" class="tab-list"></div>
+        <button id="close-all-duplicates" class="btn btn-primary hidden">
+          Close All Duplicates - Keep One Each
+        </button>
+      </section>
+
+      <!-- Similar Tabs Section -->
+      <section id="similar-section" class="section">
+        <div class="section-header">
+          <h2>Similar Tabs</h2>
+          <span id="similar-count" class="count-badge">0 pairs</span>
+        </div>
+        <div id="similar-list" class="tab-list"></div>
+      </section>
+
+      <!-- No Duplicates Message -->
+      <div id="no-duplicates" class="empty-state hidden">
+        <span class="icon">✓</span>
+        <p>No duplicate or similar tabs found!</p>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <footer>
+      <button id="settings-toggle" class="btn btn-link">Settings</button>
+      <div id="settings-panel" class="settings-panel hidden">
+        <label>
+          Similarity Threshold:
+          <input type="range" id="threshold" min="60" max="95" value="80">
+          <span id="threshold-value">80%</span>
+        </label>
+        <button id="rescan" class="btn btn-secondary">Rescan Tabs</button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

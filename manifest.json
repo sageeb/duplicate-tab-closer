@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Duplicate Tab Closer",
+  "version": "1.0.0",
+  "description": "Identify and close duplicate/similar tabs with fuzzy URL matching",
+  "permissions": ["tabs", "storage"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
