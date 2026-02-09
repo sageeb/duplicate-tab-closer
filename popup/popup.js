@@ -456,10 +456,28 @@ async function focusTab(tab) {
 
 async function closeAllDuplicates() {
   if (!currentAnalysis) return;
+
+  // Get the currently active tab so we don't close it
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const activeTabId = activeTab?.id;
+
   const tabsToClose = [];
   for (const group of currentAnalysis.exactDuplicates) {
-    for (let i = 1; i < group.tabs.length; i++) {
-      tabsToClose.push(group.tabs[i].id);
+    // Check if active tab is in this group
+    const activeInGroup = group.tabs.find(t => t.id === activeTabId);
+
+    if (activeInGroup) {
+      // Keep the active tab, close all others in the group
+      for (const tab of group.tabs) {
+        if (tab.id !== activeTabId) {
+          tabsToClose.push(tab.id);
+        }
+      }
+    } else {
+      // Active tab not in group - keep first tab, close the rest
+      for (let i = 1; i < group.tabs.length; i++) {
+        tabsToClose.push(group.tabs[i].id);
+      }
     }
   }
   if (tabsToClose.length === 0) return;
@@ -474,6 +492,14 @@ async function closeAllDuplicates() {
 }
 
 async function handleSimilarAction(pair, tabToClose, pairEl) {
+  // Don't close the currently active tab
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tabToClose.id === activeTab?.id) {
+    // User is trying to close the active tab - close the other one instead
+    const otherTab = tabToClose.id === pair.tab1.id ? pair.tab2 : pair.tab1;
+    tabToClose = otherTab;
+  }
+
   try {
     await chrome.tabs.remove([tabToClose.id]);
     pairEl.remove();
